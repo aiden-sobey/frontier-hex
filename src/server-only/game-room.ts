@@ -1,26 +1,26 @@
-import { Server as SocketServer } from 'socket.io'
+import { Server as SocketServer } from 'socket.io';
 import type {
   GameState,
   GameAction,
   ClientGameState,
   ClientPlayerState,
   GameEvent,
-} from '../engine/types'
-import { applyAction } from '../engine/actions'
+} from '../engine/types';
+import { applyAction } from '../engine/actions';
 
 export class GameRoom {
-  private gameState: GameState
-  private io: SocketServer
-  private roomId: string
-  private playerSocketMap: Map<string, string> // playerId -> socketId
-  private socketPlayerMap: Map<string, string> // socketId -> playerId
+  private gameState: GameState;
+  private io: SocketServer;
+  private roomId: string;
+  private playerSocketMap: Map<string, string>; // playerId -> socketId
+  private socketPlayerMap: Map<string, string>; // socketId -> playerId
 
   constructor(io: SocketServer, roomId: string, gameState: GameState) {
-    this.io = io
-    this.roomId = roomId
-    this.gameState = gameState
-    this.playerSocketMap = new Map()
-    this.socketPlayerMap = new Map()
+    this.io = io;
+    this.roomId = roomId;
+    this.gameState = gameState;
+    this.playerSocketMap = new Map();
+    this.socketPlayerMap = new Map();
   }
 
   /**
@@ -29,18 +29,18 @@ export class GameRoom {
    */
   addPlayer(playerId: string, socketId: string): void {
     // If this player was already connected with a different socket, clean up the old mapping
-    const existingSocketId = this.playerSocketMap.get(playerId)
+    const existingSocketId = this.playerSocketMap.get(playerId);
     if (existingSocketId && existingSocketId !== socketId) {
-      this.socketPlayerMap.delete(existingSocketId)
+      this.socketPlayerMap.delete(existingSocketId);
     }
 
-    this.playerSocketMap.set(playerId, socketId)
-    this.socketPlayerMap.set(socketId, playerId)
+    this.playerSocketMap.set(playerId, socketId);
+    this.socketPlayerMap.set(socketId, playerId);
 
     // Add the socket to the Socket.IO room
-    const socket = this.io.sockets.sockets.get(socketId)
+    const socket = this.io.sockets.sockets.get(socketId);
     if (socket) {
-      socket.join(this.roomId)
+      socket.join(this.roomId);
     }
   }
 
@@ -49,19 +49,19 @@ export class GameRoom {
    * Returns the playerId if found, or undefined.
    */
   removePlayer(socketId: string): string | undefined {
-    const playerId = this.socketPlayerMap.get(socketId)
-    if (!playerId) return undefined
+    const playerId = this.socketPlayerMap.get(socketId);
+    if (!playerId) return undefined;
 
-    this.socketPlayerMap.delete(socketId)
-    this.playerSocketMap.delete(playerId)
+    this.socketPlayerMap.delete(socketId);
+    this.playerSocketMap.delete(playerId);
 
     // Remove the socket from the Socket.IO room
-    const socket = this.io.sockets.sockets.get(socketId)
+    const socket = this.io.sockets.sockets.get(socketId);
     if (socket) {
-      socket.leave(this.roomId)
+      socket.leave(this.roomId);
     }
 
-    return playerId
+    return playerId;
   }
 
   /**
@@ -69,16 +69,16 @@ export class GameRoom {
    * Returns success/error status. On success, broadcasts the state update.
    */
   processAction(action: GameAction): { success: boolean; error?: string } {
-    const result = applyAction(this.gameState, action)
+    const result = applyAction(this.gameState, action);
 
     if (!result.valid) {
-      return { success: false, error: result.error ?? 'Invalid action' }
+      return { success: false, error: result.error ?? 'Invalid action' };
     }
 
-    this.gameState = result.state
-    this.broadcastStateUpdate(action, result.events)
+    this.gameState = result.state;
+    this.broadcastStateUpdate(action, result.events);
 
-    return { success: true }
+    return { success: true };
   }
 
   /**
@@ -87,13 +87,13 @@ export class GameRoom {
    * and other players' development cards (replaced with developmentCardCount).
    */
   getClientState(playerId: string): ClientGameState {
-    const state = this.gameState
+    const state = this.gameState;
 
     // Find the requesting player's index
-    const requestingPlayerIndex = state.players.findIndex((p) => p.id === playerId)
+    const requestingPlayerIndex = state.players.findIndex((p) => p.id === playerId);
 
     const clientPlayers: ClientPlayerState[] = state.players.map((player, index) => {
-      const isRequestingPlayer = index === requestingPlayerIndex
+      const isRequestingPlayer = index === requestingPlayerIndex;
 
       return {
         id: player.id,
@@ -110,8 +110,8 @@ export class GameRoom {
         // Show the requesting player's own cards; hide other players' cards
         developmentCards: isRequestingPlayer ? player.developmentCards : [],
         newDevCards: isRequestingPlayer ? player.newDevCards : [],
-      }
-    })
+      };
+    });
 
     // Build the client state, omitting devCardDeck and randomSeed
     const {
@@ -119,13 +119,13 @@ export class GameRoom {
       randomSeed: _randomSeed,
       players: _players,
       ...rest
-    } = state
+    } = state;
 
     return {
       ...rest,
       players: clientPlayers,
       devCardDeckSize: state.devCardDeck.length,
-    }
+    };
   }
 
   /**
@@ -134,13 +134,13 @@ export class GameRoom {
    */
   broadcastStateUpdate(action: GameAction, events: GameEvent[]): void {
     for (const [playerId, socketId] of this.playerSocketMap) {
-      const socket = this.io.sockets.sockets.get(socketId)
+      const socket = this.io.sockets.sockets.get(socketId);
       if (socket) {
         socket.emit('state-update', {
           state: this.getClientState(playerId),
           events,
           action,
-        })
+        });
       }
     }
   }
@@ -149,14 +149,14 @@ export class GameRoom {
    * Send the full (redacted) state to a specific player.
    */
   sendFullState(playerId: string): void {
-    const socketId = this.playerSocketMap.get(playerId)
-    if (!socketId) return
+    const socketId = this.playerSocketMap.get(playerId);
+    if (!socketId) return;
 
-    const socket = this.io.sockets.sockets.get(socketId)
+    const socket = this.io.sockets.sockets.get(socketId);
     if (socket) {
       socket.emit('full-state', {
         state: this.getClientState(playerId),
-      })
+      });
     }
   }
 
@@ -164,34 +164,34 @@ export class GameRoom {
    * Get the underlying (unredacted) game state.
    */
   getGameState(): GameState {
-    return this.gameState
+    return this.gameState;
   }
 
   /**
    * Check if all players in the game are currently connected via sockets.
    */
   isReady(): boolean {
-    return this.gameState.players.every((player) => this.playerSocketMap.has(player.id))
+    return this.gameState.players.every((player) => this.playerSocketMap.has(player.id));
   }
 
   /**
    * Get the room ID (game ID).
    */
   getRoomId(): string {
-    return this.roomId
+    return this.roomId;
   }
 
   /**
    * Get the player ID for a given socket ID.
    */
   getPlayerIdBySocket(socketId: string): string | undefined {
-    return this.socketPlayerMap.get(socketId)
+    return this.socketPlayerMap.get(socketId);
   }
 
   /**
    * Get the socket ID for a given player ID.
    */
   getSocketIdByPlayer(playerId: string): string | undefined {
-    return this.playerSocketMap.get(playerId)
+    return this.playerSocketMap.get(playerId);
   }
 }

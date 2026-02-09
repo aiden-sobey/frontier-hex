@@ -1,10 +1,5 @@
-import {
-  Outlet,
-  createRootRoute,
-  HeadContent,
-  Scripts,
-} from '@tanstack/react-router'
-import type { ReactNode } from 'react'
+import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router';
+import type { ReactNode } from 'react';
 
 export const Route = createRootRoute({
   head: () => ({
@@ -13,19 +8,17 @@ export const Route = createRootRoute({
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { title: 'Catan Online' },
     ],
-    links: [
-      { rel: 'stylesheet', href: '/src/styles.css' },
-    ],
+    links: [{ rel: 'stylesheet', href: '/src/styles.css' }],
   }),
   component: RootComponent,
-})
+});
 
 function RootComponent() {
   return (
     <RootDocument>
       <Outlet />
     </RootDocument>
-  )
+  );
 }
 
 function RootDocument({ children }: { children: ReactNode }) {
@@ -39,5 +32,5 @@ function RootDocument({ children }: { children: ReactNode }) {
         <Scripts />
       </body>
     </html>
-  )
+  );
 }

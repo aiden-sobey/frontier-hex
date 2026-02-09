@@ -33,7 +33,9 @@
       "Bash(npx tsc:*)",
       "Bash(xargs file:*)",
       "Bash(pnpm list:*)",
-      "Bash(pnpm --version:*)"
+      "Bash(pnpm --version:*)",
+      "Bash(pnpm format:*)",
+      "Bash(pnpm format:check:*)"
     ]
   }
 }

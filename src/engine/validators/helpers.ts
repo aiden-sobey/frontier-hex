@@ -1,5 +1,5 @@
-import { GameState, ResourceBundle, ResourceType } from '../types'
-import { RESOURCE_TYPES } from '../constants'
+import { GameState, ResourceBundle, ResourceType } from '../types';
+import { RESOURCE_TYPES } from '../constants';
 
 /**
  * Check if a player has at least the required resources.
@@ -11,7 +11,7 @@ export function hasResources(have: ResourceBundle, need: ResourceBundle): boolea
     have.sheep >= need.sheep &&
     have.wheat >= need.wheat &&
     have.ore >= need.ore
-  )
+  );
 }
 
 /**
@@ -24,7 +24,7 @@ export function subtractResources(from: ResourceBundle, cost: ResourceBundle): R
     sheep: from.sheep - cost.sheep,
     wheat: from.wheat - cost.wheat,
     ore: from.ore - cost.ore,
-  }
+  };
 }
 
 /**
@@ -37,14 +37,14 @@ export function addResources(to: ResourceBundle, add: ResourceBundle): ResourceB
     sheep: to.sheep + add.sheep,
     wheat: to.wheat + add.wheat,
     ore: to.ore + add.ore,
-  }
+  };
 }
 
 /**
  * Total number of resource cards in a bundle.
  */
 export function totalResources(bundle: ResourceBundle): number {
-  return bundle.wood + bundle.brick + bundle.sheep + bundle.wheat + bundle.ore
+  return bundle.wood + bundle.brick + bundle.sheep + bundle.wheat + bundle.ore;
 }
 
 /**
@@ -53,31 +53,39 @@ export function totalResources(bundle: ResourceBundle): number {
 export function cloneState(state: GameState): GameState {
   return {
     ...state,
-    players: state.players.map(p => ({ ...p })),
+    players: state.players.map((p) => ({ ...p })),
     vertexBuildings: { ...state.vertexBuildings },
     edgeRoads: { ...state.edgeRoads },
     playersNeedingToDiscard: [...state.playersNeedingToDiscard],
     log: [...state.log],
-  }
+  };
 }
 
 /**
  * Get resource count for a specific type.
  */
 export function getResourceCount(bundle: ResourceBundle, resource: ResourceType): number {
-  return bundle[resource]
+  return bundle[resource];
 }
 
 /**
  * Set a specific resource in a bundle.
  */
-export function setResource(bundle: ResourceBundle, resource: ResourceType, amount: number): ResourceBundle {
-  return { ...bundle, [resource]: amount }
+export function setResource(
+  bundle: ResourceBundle,
+  resource: ResourceType,
+  amount: number,
+): ResourceBundle {
+  return { ...bundle, [resource]: amount };
 }
 
 /**
  * Add a specific resource amount to a bundle.
  */
-export function addResource(bundle: ResourceBundle, resource: ResourceType, amount: number): ResourceBundle {
-  return { ...bundle, [resource]: bundle[resource] + amount }
+export function addResource(
+  bundle: ResourceBundle,
+  resource: ResourceType,
+  amount: number,
+): ResourceBundle {
+  return { ...bundle, [resource]: bundle[resource] + amount };
 }

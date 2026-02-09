@@ -1,80 +1,75 @@
-import { useGameStore } from '~/stores/game-store'
-import { useUIStore } from '~/stores/ui-store'
-import { useGameActions } from '~/hooks/useGameActions'
-import { Button } from '~/components/ui/Button'
-import { GamePhase, type GameState } from '~/engine/types'
-import type { GameAction } from '~/engine/types'
-import {
-  SETTLEMENT_COST,
-  ROAD_COST,
-  CITY_COST,
-  DEV_CARD_COST,
-} from '~/engine/constants'
-import { hasResources } from '~/engine/validators/helpers'
+import { useGameStore } from '~/stores/game-store';
+import { useUIStore } from '~/stores/ui-store';
+import { useGameActions } from '~/hooks/useGameActions';
+import { Button } from '~/components/ui/Button';
+import { GamePhase, type GameState } from '~/engine/types';
+import type { GameAction } from '~/engine/types';
+import { SETTLEMENT_COST, ROAD_COST, CITY_COST, DEV_CARD_COST } from '~/engine/constants';
+import { hasResources } from '~/engine/validators/helpers';
 import {
   getValidSettlementLocations,
   getValidRoadLocations,
   getValidCityLocations,
-} from '~/engine/actions'
-import type { SelectedAction } from '~/stores/ui-store'
+} from '~/engine/actions';
+import type { SelectedAction } from '~/stores/ui-store';
 
 interface BuildMenuProps {
-  sendAction?: (action: GameAction) => Promise<{ success: boolean; error?: string }>
+  sendAction?: (action: GameAction) => Promise<{ success: boolean; error?: string }>;
 }
 
 export function BuildMenu({ sendAction }: BuildMenuProps) {
-  const gameState = useGameStore((s) => s.gameState)
-  const clientState = useGameStore((s) => s.clientState)
-  const myPlayerIndex = useGameStore((s) => s.myPlayerIndex)
-  const selectedAction = useUIStore((s) => s.selectedAction)
-  const setSelectedAction = useUIStore((s) => s.setSelectedAction)
-  const setHighlightedVertices = useUIStore((s) => s.setHighlightedVertices)
-  const setHighlightedEdges = useUIStore((s) => s.setHighlightedEdges)
-  const clearSelection = useUIStore((s) => s.clearSelection)
-  const actions = useGameActions(sendAction)
+  const gameState = useGameStore((s) => s.gameState);
+  const clientState = useGameStore((s) => s.clientState);
+  const myPlayerIndex = useGameStore((s) => s.myPlayerIndex);
+  const selectedAction = useUIStore((s) => s.selectedAction);
+  const setSelectedAction = useUIStore((s) => s.setSelectedAction);
+  const setHighlightedVertices = useUIStore((s) => s.setHighlightedVertices);
+  const setHighlightedEdges = useUIStore((s) => s.setHighlightedEdges);
+  const clearSelection = useUIStore((s) => s.clearSelection);
+  const actions = useGameActions(sendAction);
 
-  const state = gameState ?? clientState
-  if (!state || myPlayerIndex === null) return null
+  const state = gameState ?? clientState;
+  if (!state || myPlayerIndex === null) return null;
 
-  const player = state.players[myPlayerIndex]
-  const isMyTurn = state.currentPlayerIndex === myPlayerIndex
-  const isMain = state.phase === GamePhase.Main
+  const player = state.players[myPlayerIndex];
+  const isMyTurn = state.currentPlayerIndex === myPlayerIndex;
+  const isMain = state.phase === GamePhase.Main;
 
   const canBuildSettlement =
-    isMyTurn && isMain && player.settlements > 0 && hasResources(player.resources, SETTLEMENT_COST)
+    isMyTurn && isMain && player.settlements > 0 && hasResources(player.resources, SETTLEMENT_COST);
   const canBuildRoad =
-    isMyTurn && isMain && player.roads > 0 && hasResources(player.resources, ROAD_COST)
+    isMyTurn && isMain && player.roads > 0 && hasResources(player.resources, ROAD_COST);
   const canBuildCity =
-    isMyTurn && isMain && player.cities > 0 && hasResources(player.resources, CITY_COST)
+    isMyTurn && isMain && player.cities > 0 && hasResources(player.resources, CITY_COST);
   const canBuyDevCard =
     isMyTurn &&
     isMain &&
     hasResources(player.resources, DEV_CARD_COST) &&
-    (gameState ? gameState.devCardDeck.length > 0 : true)
+    (gameState ? gameState.devCardDeck.length > 0 : true);
 
   function handleToggleAction(action: SelectedAction) {
     if (selectedAction === action) {
-      clearSelection()
-      return
+      clearSelection();
+      return;
     }
 
-    setSelectedAction(action)
+    setSelectedAction(action);
 
     switch (action) {
       case 'buildSettlement': {
-        const locs = getValidSettlementLocations(state as GameState, myPlayerIndex!)
-        setHighlightedVertices(locs)
-        break
+        const locs = getValidSettlementLocations(state as GameState, myPlayerIndex!);
+        setHighlightedVertices(locs);
+        break;
       }
       case 'buildRoad': {
-        const locs = getValidRoadLocations(state as GameState, myPlayerIndex!)
-        setHighlightedEdges(locs)
-        break
+        const locs = getValidRoadLocations(state as GameState, myPlayerIndex!);
+        setHighlightedEdges(locs);
+        break;
       }
       case 'buildCity': {
-        const locs = getValidCityLocations(state as GameState, myPlayerIndex!)
-        setHighlightedVertices(locs)
-        break
+        const locs = getValidCityLocations(state as GameState, myPlayerIndex!);
+        setHighlightedVertices(locs);
+        break;
       }
     }
   }
@@ -119,5 +114,5 @@ export function BuildMenu({ sendAction }: BuildMenuProps) {
         </Button>
       )}
     </div>
-  )
+  );
 }

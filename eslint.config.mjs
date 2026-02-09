@@ -1,5 +1,6 @@
-import eslintPlugin from '@typescript-eslint/eslint-plugin'
-import tsParser from '@typescript-eslint/parser'
+import eslintPlugin from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import prettierConfig from 'eslint-config-prettier';
 
 export default [
   {
@@ -18,4 +19,5 @@ export default [
   {
     ignores: ['src/routeTree.gen.ts'],
   },
-]
+  prettierConfig,
+];

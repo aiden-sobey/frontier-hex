@@ -1,21 +1,21 @@
-import type { Plugin } from 'vite'
-import { Server as SocketServer } from 'socket.io'
-import type { ClientToServerEvents, ServerToClientEvents } from '../engine/types'
-import { RoomManager } from './room-manager'
-import { registerSocketHandlers } from './socket-handlers'
+import type { Plugin } from 'vite';
+import { Server as SocketServer } from 'socket.io';
+import type { ClientToServerEvents, ServerToClientEvents } from '../engine/types';
+import { RoomManager } from './room-manager';
+import { registerSocketHandlers } from './socket-handlers';
 
-const _global = globalThis as typeof globalThis & { __catanRoomManager?: RoomManager }
+const _global = globalThis as typeof globalThis & { __catanRoomManager?: RoomManager };
 
 // Module-level references so they survive HMR reloads
-let io: SocketServer<ClientToServerEvents, ServerToClientEvents> | null = null
-let roomManager: RoomManager | null = null
+let io: SocketServer<ClientToServerEvents, ServerToClientEvents> | null = null;
+let roomManager: RoomManager | null = null;
 
 /**
  * Get the RoomManager singleton. Used by server functions to create/access rooms.
  * Returns undefined if the socket server hasn't been initialized yet.
  */
 export function getRoomManager(): RoomManager | undefined {
-  return roomManager ?? _global.__catanRoomManager ?? undefined
+  return roomManager ?? _global.__catanRoomManager ?? undefined;
 }
 
 /**
@@ -27,8 +27,10 @@ export function socketDevPlugin(): Plugin {
     name: 'socket-io-dev',
     configureServer(server) {
       if (!server.httpServer) {
-        console.warn('[socket-io-dev] No httpServer available on Vite dev server. Socket.IO will not be attached.')
-        return
+        console.warn(
+          '[socket-io-dev] No httpServer available on Vite dev server. Socket.IO will not be attached.',
+        );
+        return;
       }
 
       // Only create once (survives HMR)
@@ -41,14 +43,14 @@ export function socketDevPlugin(): Plugin {
           },
           // Avoid conflicts with Vite's own WebSocket for HMR
           serveClient: false,
-        })
+        });
 
-        roomManager = new RoomManager(io)
-        _global.__catanRoomManager = roomManager
-        registerSocketHandlers(io, roomManager)
+        roomManager = new RoomManager(io);
+        _global.__catanRoomManager = roomManager;
+        registerSocketHandlers(io, roomManager);
 
-        console.log('[socket-io-dev] Socket.IO server attached to Vite dev server')
+        console.log('[socket-io-dev] Socket.IO server attached to Vite dev server');
       }
     },
-  }
+  };
 }

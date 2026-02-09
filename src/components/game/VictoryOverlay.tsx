@@ -1,38 +1,33 @@
-import { useGameStore } from '~/stores/game-store'
-import { GamePhase, PlayerColor } from '~/engine/types'
+import { useGameStore } from '~/stores/game-store';
+import { GamePhase, PlayerColor } from '~/engine/types';
 
 const COLOR_TEXT: Record<PlayerColor, string> = {
   [PlayerColor.Red]: 'text-red-400',
   [PlayerColor.Blue]: 'text-blue-400',
   [PlayerColor.White]: 'text-gray-200',
   [PlayerColor.Orange]: 'text-orange-400',
-}
+};
 
 export function VictoryOverlay() {
-  const gameState = useGameStore((s) => s.gameState)
-  const clientState = useGameStore((s) => s.clientState)
+  const gameState = useGameStore((s) => s.gameState);
+  const clientState = useGameStore((s) => s.clientState);
 
-  const state = gameState ?? clientState
+  const state = gameState ?? clientState;
   if (!state || state.phase !== GamePhase.GameOver || state.winner === null) {
-    return null
+    return null;
   }
 
-  const winner = state.players[state.winner]
+  const winner = state.players[state.winner];
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70">
       <div className="text-center">
-        <h1 className="text-5xl font-bold mb-4">Game Over!</h1>
-        <p className="text-2xl mb-2">
-          <span className={`font-bold ${COLOR_TEXT[winner.color]}`}>
-            {winner.name}
-          </span>{' '}
-          wins!
+        <h1 className="mb-4 text-5xl font-bold">Game Over!</h1>
+        <p className="mb-2 text-2xl">
+          <span className={`font-bold ${COLOR_TEXT[winner.color]}`}>{winner.name}</span> wins!
         </p>
-        <p className="text-gray-400">
-          Congratulations to the new ruler of Catan.
-        </p>
+        <p className="text-gray-400">Congratulations to the new ruler of Catan.</p>
       </div>
     </div>
-  )
+  );
 }

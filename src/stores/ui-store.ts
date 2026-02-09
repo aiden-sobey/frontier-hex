@@ -1,27 +1,22 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
 
-export type SelectedAction =
-  | 'buildSettlement'
-  | 'buildRoad'
-  | 'buildCity'
-  | 'moveRobber'
-  | null
+export type SelectedAction = 'buildSettlement' | 'buildRoad' | 'buildCity' | 'moveRobber' | null;
 
 interface UIStore {
-  selectedAction: SelectedAction
-  highlightedVertices: string[]
-  highlightedEdges: string[]
-  highlightedHexes: string[]
-  showTradeDialog: boolean
-  showDevCards: boolean
+  selectedAction: SelectedAction;
+  highlightedVertices: string[];
+  highlightedEdges: string[];
+  highlightedHexes: string[];
+  showTradeDialog: boolean;
+  showDevCards: boolean;
 
-  setSelectedAction: (action: SelectedAction) => void
-  setHighlightedVertices: (keys: string[]) => void
-  setHighlightedEdges: (keys: string[]) => void
-  setHighlightedHexes: (keys: string[]) => void
-  clearSelection: () => void
-  setShowTradeDialog: (show: boolean) => void
-  setShowDevCards: (show: boolean) => void
+  setSelectedAction: (action: SelectedAction) => void;
+  setHighlightedVertices: (keys: string[]) => void;
+  setHighlightedEdges: (keys: string[]) => void;
+  setHighlightedHexes: (keys: string[]) => void;
+  clearSelection: () => void;
+  setShowTradeDialog: (show: boolean) => void;
+  setShowDevCards: (show: boolean) => void;
 }
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -47,4 +42,4 @@ export const useUIStore = create<UIStore>((set) => ({
 
   setShowTradeDialog: (show) => set({ showTradeDialog: show }),
   setShowDevCards: (show) => set({ showDevCards: show }),
-}))
+}));

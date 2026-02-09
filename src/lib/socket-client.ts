@@ -1,9 +1,9 @@
-import { io, Socket } from 'socket.io-client'
-import type { ClientToServerEvents, ServerToClientEvents } from '~/engine/types'
+import { io, Socket } from 'socket.io-client';
+import type { ClientToServerEvents, ServerToClientEvents } from '~/engine/types';
 
-type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>
+type TypedSocket = Socket<ServerToClientEvents, ClientToServerEvents>;
 
-let socket: TypedSocket | null = null
+let socket: TypedSocket | null = null;
 
 /**
  * Get the Socket.IO client singleton.
@@ -15,9 +15,9 @@ export function getSocket(): TypedSocket {
     socket = io({
       path: '/socket.io',
       autoConnect: false,
-    }) as TypedSocket
+    }) as TypedSocket;
   }
-  return socket
+  return socket;
 }
 
 /**
@@ -26,7 +26,7 @@ export function getSocket(): TypedSocket {
  */
 export function destroySocket(): void {
   if (socket) {
-    socket.disconnect()
-    socket = null
+    socket.disconnect();
+    socket = null;
   }
 }
