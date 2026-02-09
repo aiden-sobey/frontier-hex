@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(git -C /Users/aiden/dev/catan log --oneline -20)",
+      "WebFetch(domain:tanstack.com)",
+      "WebFetch(domain:ldoherty.dev)",
+      "WebFetch(domain:justserdar.dev)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:gist.github.com)",
+      "WebFetch(domain:react.pixijs.io)",
+      "WebFetch(domain:v3.nitro.build)",
+      "Bash(pnpm install:*)",
+      "Bash(corepack enable:*)",
+      "Bash(corepack prepare:*)",
+      "Bash(npm install:*)",
+      "Bash(pnpm view:*)",
+      "Bash(npm view:*)",
+      "Bash(npx vitest run:*)",
+      "Bash(timeout 20 pnpm dev:*)",
+      "Bash(timeout 15 pnpm dev:*)",
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(/dev/null -exec cat {} ;)",
+      "Bash(pkill:*)",
+      "Bash(pnpm vitest run:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(ls:*)",
+      "Bash(grep:*)"
+    ]
+  }
+}
