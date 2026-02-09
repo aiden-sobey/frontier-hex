@@ -66,10 +66,9 @@ export function generateBoard(seed: number): { hexTiles: HexTile[]; robberHex: A
 }
 
 // Generate ports at standard positions around the board perimeter
-// The standard Catan board has 9 ports at fixed edge positions
+// A board has 9 ports at fixed edge positions
 export function generatePorts(boardGraph: BoardGraph, rng: () => number): Port[] {
   // Find perimeter vertices: vertices that touch fewer than 3 board hexes
-  // Standard Catan has 9 ports around the perimeter
   // We'll place them at evenly-spaced positions around the edge
 
   const hexSet = new Set(boardGraph.hexes.map(hexKey));
@@ -193,9 +192,12 @@ export function initializeGame(config: GameConfig): GameState {
   const ports = generatePorts(boardGraph, rng);
   const devCardDeck = createDevCardDeck(rng);
 
-  const players = config.playerIds.map((id, i) =>
-    createPlayer(id, config.playerNames[i] || `Player ${i + 1}`, PLAYER_COLORS[i]),
+  // Shuffle player order so starting position is random
+  const playerOrder = shuffle(
+    config.playerIds.map((id, i) => ({ id, name: config.playerNames[i] || `Player ${i + 1}` })),
+    rng,
   );
+  const players = playerOrder.map((p, i) => createPlayer(p.id, p.name, PLAYER_COLORS[i]));
 
   return {
     gameId: config.gameId,

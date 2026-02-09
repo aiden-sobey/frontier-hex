@@ -1,4 +1,4 @@
-# Catan Online
+# Frontier Hex
 
 ## Commands
 

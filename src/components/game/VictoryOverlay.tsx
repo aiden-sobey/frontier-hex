@@ -24,9 +24,10 @@ export function VictoryOverlay() {
       <div className="text-center">
         <h1 className="mb-4 text-5xl font-bold">Game Over!</h1>
         <p className="mb-2 text-2xl">
-          <span className={`font-bold ${COLOR_TEXT[winner.color]}`}>{winner.name}</span> wins!
+          <span className={`font-bold ${COLOR_TEXT[winner.color]}`}>{winner.name}</span>
+          {winner.name === 'You' ? ' win!' : ' wins!'}
         </p>
-        <p className="text-gray-400">Congratulations to the new ruler of Catan.</p>
+        <p className="text-gray-400">Congratulations to the new ruler of the Frontier.</p>
       </div>
     </div>
   );

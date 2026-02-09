@@ -1,4 +1,11 @@
-import { TerrainType, PlayerColor } from '~/engine/types';
+import { TerrainType, PlayerColor, PortType } from '~/engine/types';
+
+export function darkenColor(color: number, factor: number): number {
+  const r = Math.floor(((color >> 16) & 0xff) * factor);
+  const g = Math.floor(((color >> 8) & 0xff) * factor);
+  const b = Math.floor((color & 0xff) * factor);
+  return (r << 16) | (g << 8) | b;
+}
 
 export const TERRAIN_COLORS: Record<TerrainType, number> = {
   [TerrainType.Forest]: 0x2d5a1b,
@@ -22,4 +29,11 @@ export const NUMBER_TOKEN_COLORS = {
 };
 
 export const OCEAN_COLOR = 0x1a5276;
-export const PORT_COLOR = 0xd4a437;
+export const PORT_COLORS: Record<PortType, number> = {
+  [PortType.Generic]: 0xd4a437,
+  [PortType.Wood]: 0x166534,
+  [PortType.Brick]: 0x991b1b,
+  [PortType.Sheep]: 0x3f6212,
+  [PortType.Wheat]: 0xa16207,
+  [PortType.Ore]: 0x4b5563,
+};

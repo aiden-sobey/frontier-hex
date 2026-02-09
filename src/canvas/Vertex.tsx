@@ -21,6 +21,12 @@ export function Vertex({ vertex, building, highlighted, onClick }: VertexProps) 
       if (building) {
         const playerColors = Object.values(PlayerColor) as PlayerColor[];
         const color = PLAYER_COLORS[playerColors[building.playerIndex]] ?? 0xffffff;
+        if (highlighted) {
+          // Golden glow ring behind the building to indicate upgrade availability
+          g.circle(0, 0, 14);
+          g.fill({ color: 0xf1c40f, alpha: 0.4 });
+          g.stroke({ color: 0xf1c40f, width: 2, alpha: 0.8 });
+        }
         if (building.type === BuildingType.Settlement) {
           // Small house shape
           g.rect(-8, -6, 16, 12);
@@ -55,7 +61,7 @@ export function Vertex({ vertex, building, highlighted, onClick }: VertexProps) 
       draw={draw}
       eventMode={highlighted ? 'static' : 'auto'}
       cursor={highlighted ? 'pointer' : 'default'}
-      onPointerDown={highlighted && onClick ? onClick : undefined}
+      onPointerTap={highlighted && onClick ? onClick : undefined}
     />
   );
 }

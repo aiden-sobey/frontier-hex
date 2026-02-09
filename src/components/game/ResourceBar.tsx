@@ -35,22 +35,31 @@ export function ResourceBar() {
   const resources: ResourceBundle = player.resources;
 
   return (
-    <div className="flex items-center gap-1.5">
+    <div className="flex items-center gap-2">
       {RESOURCE_ORDER.map((type) => {
         const config = RESOURCE_CONFIG[type];
         const count = resources[type];
         return (
           <div
             key={type}
-            className={`${config.bg} flex min-w-[60px] cursor-pointer items-center justify-center gap-1.5 rounded px-2.5 py-1.5`}
+            className={`${config.bg} relative flex h-16 w-14 cursor-pointer flex-col items-center
+              justify-center rounded-lg transition-transform hover:scale-105`}
             title={config.label}
             onClick={() => {
               setTradeOfferResource(type);
               setShowTradeDialog(true);
             }}
           >
-            <span className="text-lg">{config.icon}</span>
-            <span className="text-sm font-bold text-white">{count}</span>
+            <span className="text-2xl">{config.icon}</span>
+            <span className="text-[10px] font-medium text-white/80">{config.label}</span>
+            {count > 0 && (
+              <div
+                className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center
+                  rounded-full bg-white text-xs font-bold text-gray-900"
+              >
+                {count}
+              </div>
+            )}
           </div>
         );
       })}

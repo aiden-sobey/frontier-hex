@@ -2,7 +2,6 @@
   "permissions": {
     "allow": [
       "WebSearch",
-      "Bash(git -C /Users/aiden/dev/catan log --oneline -20)",
       "WebFetch(domain:tanstack.com)",
       "WebFetch(domain:ldoherty.dev)",
       "WebFetch(domain:justserdar.dev)",

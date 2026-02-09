@@ -52,10 +52,10 @@ function OnlineGame({ gameId }: { gameId: string }) {
   // For now, use a simple generated ID stored in sessionStorage.
   const [playerId] = useState(() => {
     if (typeof window === 'undefined') return 'player';
-    const stored = sessionStorage.getItem(`catan-player-${gameId}`);
+    const stored = sessionStorage.getItem(`frontier-player-${gameId}`);
     if (stored) return stored;
     const id = `player-${Date.now()}`;
-    sessionStorage.setItem(`catan-player-${gameId}`, id);
+    sessionStorage.setItem(`frontier-player-${gameId}`, id);
     return id;
   });
 

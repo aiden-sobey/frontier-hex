@@ -29,6 +29,7 @@ export function DiceDisplay({ sendAction }: DiceDisplayProps) {
 
   const isMyTurn = state.currentPlayerIndex === myPlayerIndex;
   const isPreRoll = state.phase === GamePhase.PreRoll;
+  const isMain = state.phase === GamePhase.Main;
   const lastRoll = state.lastDiceRoll;
 
   return (
@@ -48,7 +49,12 @@ export function DiceDisplay({ sendAction }: DiceDisplayProps) {
       )}
       {isMyTurn && isPreRoll && (
         <Button variant="primary" onClick={() => actions.rollDice()}>
-          Roll Dice
+          🎲 Roll
+        </Button>
+      )}
+      {isMyTurn && isMain && (
+        <Button variant="danger" onClick={() => actions.endTurn()}>
+          End Turn
         </Button>
       )}
     </div>

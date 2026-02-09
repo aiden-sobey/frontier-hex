@@ -22,7 +22,6 @@ export const TERRAIN_DISTRIBUTION: TerrainType[] = [
   TerrainType.Desert,
 ];
 
-// Standard Catan number tokens in spiral order
 export const NUMBER_TOKENS: number[] = [5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 3, 11];
 
 export const SETTLEMENT_COST: ResourceBundle = { wood: 1, brick: 1, sheep: 1, wheat: 1, ore: 0 };

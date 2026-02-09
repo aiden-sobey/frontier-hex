@@ -136,7 +136,6 @@ export function updateLongestRoad(state: GameState): GameState {
       longestLength = maxLen;
     } else {
       // If current holder doesn't have the max, nobody gets it in a tie
-      // Actually in Catan, the first person to achieve it keeps it until someone beats them
       // If nobody currently holds it, nobody gets it in a tie
       if (longestPlayer === null) {
         longestPlayer = null;

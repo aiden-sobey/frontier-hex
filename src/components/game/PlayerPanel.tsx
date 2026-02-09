@@ -23,16 +23,9 @@ function getVP(
   longestRoadPlayer: number | null,
   largestArmyPlayer: number | null,
 ): number {
-  // Count buildings placed
-  const settlementsPlaced = 5 - player.settlements;
-  const citiesPlaced = 4 - player.cities;
-  let vp = settlementsPlaced + citiesPlaced; // cities worth 2 but we already counted settlement
-  // Actually cities replace settlements, so the VP is: settlements placed + 2 * cities placed
-  // But settlements go back to supply when upgraded, so:
-  // placed settlements (still on board) = 5 - player.settlements - citiesPlaced
-  // VP from buildings = (5 - player.settlements - citiesPlaced) * 1 + citiesPlaced * 2
-  const onBoardSettlements = 5 - player.settlements - citiesPlaced;
-  vp = onBoardSettlements + citiesPlaced * 2;
+  const settlementsOnBoard = 5 - player.settlements;
+  const citiesOnBoard = 4 - player.cities;
+  let vp = settlementsOnBoard + citiesOnBoard * 2;
 
   if (longestRoadPlayer === playerIndex) vp += 2;
   if (largestArmyPlayer === playerIndex) vp += 2;
@@ -79,7 +72,6 @@ export function PlayerPanel() {
               <span>Cards: {resourceCount}</span>
               <span>Dev: {devCardCount}</span>
               <span>Knights: {player.playedKnights}</span>
-              <span>Roads: {15 - player.roads}</span>
               <span>
                 {state.longestRoadPlayer === i && (
                   <span className="text-yellow-400" title="Longest Road">

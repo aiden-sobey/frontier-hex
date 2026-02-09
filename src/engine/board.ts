@@ -19,7 +19,7 @@ export function hexDistance(a: AxialCoord, b: AxialCoord): number {
   return (Math.abs(a.q - b.q) + Math.abs(a.q + a.r - b.q - b.r) + Math.abs(a.r - b.r)) / 2;
 }
 
-// Generate 19 hex coords for standard Catan board (radius 2)
+// Generate 19 hex coords for a standard board (radius 2)
 export function generateBoardHexes(): AxialCoord[] {
   const hexes: AxialCoord[] = [];
   for (let q = -2; q <= 2; q++) {

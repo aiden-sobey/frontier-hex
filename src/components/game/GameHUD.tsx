@@ -47,7 +47,7 @@ export function GameHUD({ sendAction }: GameHUDProps) {
 
           <Suspense
             fallback={
-              <div className="flex h-[700px] w-[900px] items-center justify-center rounded-lg bg-gray-800">
+              <div className="flex h-full w-full items-center justify-center rounded-lg bg-gray-800">
                 <p className="text-gray-400">Loading canvas...</p>
               </div>
             }
@@ -59,9 +59,6 @@ export function GameHUD({ sendAction }: GameHUDProps) {
         {/* Right sidebar */}
         <div className="flex w-60 flex-none flex-col border-l border-gray-800 bg-gray-900/90">
           <div className="p-2">
-            <DevCardHand sendAction={sendAction} />
-          </div>
-          <div className="p-2">
             <Button variant="secondary" className="w-full" onClick={() => setShowTradeDialog(true)}>
               Trade
             </Button>
@@ -72,12 +69,18 @@ export function GameHUD({ sendAction }: GameHUDProps) {
         </div>
       </div>
 
-      {/* Bottom: Resources + Build + Dice */}
-      <div className="flex-none border-t border-gray-800 bg-gray-900/90 px-4 py-2">
-        <div className="flex items-center justify-between">
-          <ResourceBar />
-          <BuildMenu sendAction={sendAction} />
-          <DiceDisplay sendAction={sendAction} />
+      {/* Bottom section — card fan + footer */}
+      <div className="relative flex-none">
+        {/* Card fan — positioned above footer, bottom hidden by footer's z-index */}
+        <DevCardHand sendAction={sendAction} />
+
+        {/* Footer bar — higher z-index covers bottom of cards */}
+        <div className="relative z-10 border-t border-gray-800 bg-gray-900/90 px-4 py-2">
+          <div className="flex items-center justify-between">
+            <ResourceBar />
+            <BuildMenu sendAction={sendAction} />
+            <DiceDisplay sendAction={sendAction} />
+          </div>
         </div>
       </div>
 

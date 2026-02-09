@@ -49,7 +49,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       playerNames: ['You', 'Bot 1', 'Bot 2', 'Bot 3'],
       playerIds: ['human', 'bot1', 'bot2', 'bot3'],
     });
-    set({ gameState: state, boardGraph: state.boardGraph, myPlayerIndex: 0 });
+    const myIdx = state.players.findIndex((p) => p.id === 'human');
+    set({ gameState: state, boardGraph: state.boardGraph, myPlayerIndex: myIdx });
   },
 
   applyLocalAction: (action) => {

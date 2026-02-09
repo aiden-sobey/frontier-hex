@@ -65,9 +65,7 @@ export function TradeDialog({ sendAction }: TradeDialogProps) {
 
   // Bank trade ratios
   function getRatio(resource: ResourceType): number {
-    if (gameState) return getTradeRatio(gameState, myPlayerIndex!, resource);
-    // For client state, approximate from player ports
-    return 4; // Fallback
+    return getTradeRatio(state as Parameters<typeof getTradeRatio>[0], myPlayerIndex!, resource);
   }
 
   function handleBankTrade() {

@@ -54,7 +54,7 @@ export function Edge({ edge, road, highlighted, onClick }: EdgeProps) {
       draw={draw}
       eventMode={highlighted ? 'static' : 'auto'}
       cursor={highlighted ? 'pointer' : 'default'}
-      onPointerDown={highlighted && onClick ? onClick : undefined}
+      onPointerTap={highlighted && onClick ? onClick : undefined}
       hitArea={
         highlighted
           ? {
