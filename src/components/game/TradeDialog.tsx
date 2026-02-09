@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGameStore } from '~/stores/game-store';
 import { useUIStore } from '~/stores/ui-store';
 import { useGameActions } from '~/hooks/useGameActions';
@@ -37,6 +37,8 @@ export function TradeDialog({ sendAction }: TradeDialogProps) {
   const myPlayerIndex = useGameStore((s) => s.myPlayerIndex);
   const showTradeDialog = useUIStore((s) => s.showTradeDialog);
   const setShowTradeDialog = useUIStore((s) => s.setShowTradeDialog);
+  const tradeOfferResource = useUIStore((s) => s.tradeOfferResource);
+  const setTradeOfferResource = useUIStore((s) => s.setTradeOfferResource);
   const actions = useGameActions(sendAction);
 
   const [tab, setTab] = useState<TradeTab>('bank');
@@ -44,6 +46,14 @@ export function TradeDialog({ sendAction }: TradeDialogProps) {
   const [bankReceive, setBankReceive] = useState<ResourceType>(ResourceType.Brick);
   const [offering, setOffering] = useState<ResourceBundle>({ ...EMPTY_RESOURCES });
   const [requesting, setRequesting] = useState<ResourceBundle>({ ...EMPTY_RESOURCES });
+
+  useEffect(() => {
+    if (showTradeDialog && tradeOfferResource !== null) {
+      setTab('player');
+      setOffering({ ...EMPTY_RESOURCES, [tradeOfferResource]: 1 });
+      setTradeOfferResource(null);
+    }
+  }, [showTradeDialog, tradeOfferResource, setTradeOfferResource]);
 
   const state = gameState ?? clientState;
   if (!state || myPlayerIndex === null) return null;
@@ -158,7 +168,15 @@ export function TradeDialog({ sendAction }: TradeDialogProps) {
                   Trade with {state.players[Number(idx)].name}
                 </Button>
               ))}
-            <Button variant="danger" onClick={() => actions.tradeCancel()}>
+            <Button
+              variant="danger"
+              onClick={() => {
+                setOffering({ ...pendingTrade.offering });
+                setRequesting({ ...pendingTrade.requesting });
+                setTab('player');
+                actions.tradeCancel();
+              }}
+            >
               Cancel
             </Button>
           </div>

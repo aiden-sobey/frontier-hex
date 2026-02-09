@@ -374,9 +374,14 @@ export class BasicBotStrategy implements BotStrategy {
   private chooseMainAction(state: GameState, playerIndex: number): GameAction | null {
     const player = state.players[playerIndex];
 
-    // If there's a pending trade from another player, reject it
+    // If there's a pending trade from another player, evaluate it
     if (state.pendingTrade && state.pendingTrade.fromPlayer !== playerIndex) {
-      return { type: 'tradeReject', playerIndex };
+      if (!state.pendingTrade.responses[playerIndex]) {
+        return this.shouldAcceptTrade(state, playerIndex)
+          ? { type: 'tradeAccept', playerIndex }
+          : { type: 'tradeReject', playerIndex };
+      }
+      return null;
     }
 
     // If there's a pending trade from us, cancel it (we shouldn't have created it)
@@ -472,6 +477,46 @@ export class BasicBotStrategy implements BotStrategy {
 
     // 7. End turn
     return { type: 'endTurn', playerIndex };
+  }
+
+  // ---- Trade Evaluation ----
+
+  private shouldAcceptTrade(state: GameState, playerIndex: number): boolean {
+    const trade = state.pendingTrade!;
+    const player = state.players[playerIndex];
+
+    // From bot's perspective: we receive what the offerer is offering,
+    // and give what the offerer is requesting
+    const receiving = trade.offering;
+    const giving = trade.requesting;
+
+    // Must have the resources to give
+    if (!hasResources(player.resources, giving)) return false;
+
+    // Value each resource by how much the bot needs it.
+    // Check goals in priority order; first goal with a deficit determines need score.
+    const goals = [CITY_COST, SETTLEMENT_COST, DEV_CARD_COST, ROAD_COST];
+
+    const needScore = (r: ResourceType): number => {
+      for (const goal of goals) {
+        if (goal[r] > player.resources[r]) {
+          return goal[r] - player.resources[r];
+        }
+      }
+      return 0;
+    };
+
+    // Score = count * (1 + needScore). Base value of 1 per resource ensures
+    // raw card count still matters even for unneeded resources.
+    let receiveValue = 0;
+    let giveValue = 0;
+    for (const r of RESOURCE_TYPES) {
+      receiveValue += receiving[r] * (1 + needScore(r));
+      giveValue += giving[r] * (1 + needScore(r));
+    }
+
+    // Lenient: accept if value received >= 60% of value given
+    return receiveValue >= giveValue * 0.6;
   }
 
   // ---- Dev Card Play ----

@@ -1,6 +1,7 @@
 import { ResourceType } from '~/engine/types';
 import type { ResourceBundle } from '~/engine/types';
 import { useGameStore } from '~/stores/game-store';
+import { useUIStore } from '~/stores/ui-store';
 
 const RESOURCE_CONFIG: Record<ResourceType, { label: string; icon: string; bg: string }> = {
   [ResourceType.Wood]: { label: 'Wood', icon: '\u{1FAB5}', bg: 'bg-green-800' },
@@ -22,6 +23,8 @@ export function ResourceBar() {
   const gameState = useGameStore((s) => s.gameState);
   const clientState = useGameStore((s) => s.clientState);
   const myPlayerIndex = useGameStore((s) => s.myPlayerIndex);
+  const setTradeOfferResource = useUIStore((s) => s.setTradeOfferResource);
+  const setShowTradeDialog = useUIStore((s) => s.setShowTradeDialog);
 
   const state = gameState ?? clientState;
   if (!state || myPlayerIndex === null) return null;
@@ -39,8 +42,12 @@ export function ResourceBar() {
         return (
           <div
             key={type}
-            className={`${config.bg} flex min-w-[60px] items-center justify-center gap-1.5 rounded px-2.5 py-1.5`}
+            className={`${config.bg} flex min-w-[60px] cursor-pointer items-center justify-center gap-1.5 rounded px-2.5 py-1.5`}
             title={config.label}
+            onClick={() => {
+              setTradeOfferResource(type);
+              setShowTradeDialog(true);
+            }}
           >
             <span className="text-lg">{config.icon}</span>
             <span className="text-sm font-bold text-white">{count}</span>
