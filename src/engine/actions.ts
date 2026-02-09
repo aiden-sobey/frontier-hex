@@ -9,7 +9,7 @@ import {
   TradeConfirmAction, TradeCancelAction,
   EndTurnAction,
   SetupPlaceSettlementAction, SetupPlaceRoadAction,
-  BuildingType,
+  BuildingType, DevelopmentCardType,
 } from './types'
 import { SETTLEMENT_COST, ROAD_COST, CITY_COST, DEV_CARD_COST, RESOURCE_TYPES } from './constants'
 import { isActionAllowedInPhase } from './phases'
@@ -255,7 +255,7 @@ export function getLegalActions(state: GameState, playerIndex: number): GameActi
         type: 'discardResources',
         playerIndex,
         resources: { wood: 0, brick: 0, sheep: 0, wheat: 0, ore: 0 },
-      } as any)
+      } as DiscardResourcesAction)
     }
     return actions
   }
@@ -306,7 +306,7 @@ export function getLegalActions(state: GameState, playerIndex: number): GameActi
 
       // Can play knight before rolling
       if (!player.hasPlayedDevCardThisTurn &&
-          player.developmentCards.includes('knight' as any)) {
+          player.developmentCards.includes(DevelopmentCardType.Knight)) {
         actions.push({ type: 'playKnight', playerIndex })
       }
       break
@@ -373,13 +373,13 @@ export function getLegalActions(state: GameState, playerIndex: number): GameActi
 
       // Play dev cards
       if (!player.hasPlayedDevCardThisTurn) {
-        if (player.developmentCards.includes('knight' as any)) {
+        if (player.developmentCards.includes(DevelopmentCardType.Knight)) {
           actions.push({ type: 'playKnight', playerIndex })
         }
-        if (player.developmentCards.includes('roadBuilding' as any) && player.roads > 0) {
+        if (player.developmentCards.includes(DevelopmentCardType.RoadBuilding) && player.roads > 0) {
           actions.push({ type: 'playRoadBuilding', playerIndex })
         }
-        if (player.developmentCards.includes('yearOfPlenty' as any)) {
+        if (player.developmentCards.includes(DevelopmentCardType.YearOfPlenty)) {
           // Would need resource choices - just add one placeholder
           for (const r1 of RESOURCE_TYPES) {
             for (const r2 of RESOURCE_TYPES) {
@@ -387,7 +387,7 @@ export function getLegalActions(state: GameState, playerIndex: number): GameActi
             }
           }
         }
-        if (player.developmentCards.includes('monopoly' as any)) {
+        if (player.developmentCards.includes(DevelopmentCardType.Monopoly)) {
           for (const r of RESOURCE_TYPES) {
             actions.push({ type: 'playMonopoly', playerIndex, resource: r })
           }

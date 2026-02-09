@@ -114,7 +114,7 @@ export type GameAction =
   | SetupPlaceSettlementAction | SetupPlaceRoadAction;
 
 // Action result
-export interface GameEvent { type: string; [key: string]: any }
+export interface GameEvent { type: string; [key: string]: unknown }
 export interface ActionResult { valid: boolean; error?: string; state: GameState; events: GameEvent[] }
 
 // Board graph (pre-computed topology)

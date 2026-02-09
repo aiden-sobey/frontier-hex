@@ -26,7 +26,14 @@
       "Bash(pnpm vitest run:*)",
       "Bash(pnpm dev:*)",
       "Bash(ls:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm remove:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(npx tsc:*)",
+      "Bash(xargs file:*)",
+      "Bash(pnpm list:*)",
+      "Bash(pnpm --version:*)"
     ]
   }
 }

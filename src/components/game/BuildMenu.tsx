@@ -2,7 +2,7 @@ import { useGameStore } from '~/stores/game-store'
 import { useUIStore } from '~/stores/ui-store'
 import { useGameActions } from '~/hooks/useGameActions'
 import { Button } from '~/components/ui/Button'
-import { GamePhase } from '~/engine/types'
+import { GamePhase, type GameState } from '~/engine/types'
 import type { GameAction } from '~/engine/types'
 import {
   SETTLEMENT_COST,
@@ -58,27 +58,21 @@ export function BuildMenu({ sendAction }: BuildMenuProps) {
       return
     }
 
-    // We need full gameState for location helpers; for online play these would come from server
-    if (!gameState) {
-      setSelectedAction(action)
-      return
-    }
-
     setSelectedAction(action)
 
     switch (action) {
       case 'buildSettlement': {
-        const locs = getValidSettlementLocations(gameState, myPlayerIndex)
+        const locs = getValidSettlementLocations(state as GameState, myPlayerIndex!)
         setHighlightedVertices(locs)
         break
       }
       case 'buildRoad': {
-        const locs = getValidRoadLocations(gameState, myPlayerIndex)
+        const locs = getValidRoadLocations(state as GameState, myPlayerIndex!)
         setHighlightedEdges(locs)
         break
       }
       case 'buildCity': {
-        const locs = getValidCityLocations(gameState, myPlayerIndex)
+        const locs = getValidCityLocations(state as GameState, myPlayerIndex!)
         setHighlightedVertices(locs)
         break
       }

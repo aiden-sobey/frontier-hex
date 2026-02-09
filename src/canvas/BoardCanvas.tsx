@@ -87,7 +87,17 @@ export function BoardCanvas({ gameState, sendAction }: BoardCanvasProps) {
       height={700}
     >
       <pixiContainer x={450} y={350}>
-        {/* Edges (roads) - render below hexes so they appear behind */}
+        {/* Hex tiles (bottom layer) */}
+        <HexGrid
+          hexTiles={hexTiles}
+          highlightedHexes={highlightedHexSet}
+          onHexClick={handleHexClick}
+        />
+        {/* Ports */}
+        {ports.map((port, i) => (
+          <Port key={i} port={port} />
+        ))}
+        {/* Edges (roads) - above hexes so highlights and roads are visible */}
         {boardGraph.edges.map((edge) => {
           const ek = edgeKey(edge)
           const isHighlighted = highlightedEdgeSet.has(ek)
@@ -101,16 +111,6 @@ export function BoardCanvas({ gameState, sendAction }: BoardCanvasProps) {
             />
           )
         })}
-        {/* Hex tiles */}
-        <HexGrid
-          hexTiles={hexTiles}
-          highlightedHexes={highlightedHexSet}
-          onHexClick={handleHexClick}
-        />
-        {/* Ports */}
-        {ports.map((port, i) => (
-          <Port key={i} port={port} />
-        ))}
         {/* Vertices (buildings) */}
         {boardGraph.vertices.map((vertex) => {
           const vk = vertexKey(vertex)

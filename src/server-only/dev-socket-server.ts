@@ -4,6 +4,8 @@ import type { ClientToServerEvents, ServerToClientEvents } from '../engine/types
 import { RoomManager } from './room-manager'
 import { registerSocketHandlers } from './socket-handlers'
 
+const _global = globalThis as typeof globalThis & { __catanRoomManager?: RoomManager }
+
 // Module-level references so they survive HMR reloads
 let io: SocketServer<ClientToServerEvents, ServerToClientEvents> | null = null
 let roomManager: RoomManager | null = null
@@ -13,7 +15,7 @@ let roomManager: RoomManager | null = null
  * Returns undefined if the socket server hasn't been initialized yet.
  */
 export function getRoomManager(): RoomManager | undefined {
-  return roomManager ?? (globalThis as any).__catanRoomManager ?? undefined
+  return roomManager ?? _global.__catanRoomManager ?? undefined
 }
 
 /**
@@ -42,7 +44,7 @@ export function socketDevPlugin(): Plugin {
         })
 
         roomManager = new RoomManager(io)
-        ;(globalThis as any).__catanRoomManager = roomManager
+        _global.__catanRoomManager = roomManager
         registerSocketHandlers(io, roomManager)
 
         console.log('[socket-io-dev] Socket.IO server attached to Vite dev server')
